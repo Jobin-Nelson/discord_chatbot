@@ -1,10 +1,11 @@
+from playwright.async_api import async_playwright
+from bs4 import BeautifulSoup
+
 import discord
-from discord.ext import commands
 from dotenv import load_dotenv
 from os import getenv
 load_dotenv()
 
-bot = commands.Bot(command_prefix=".")
 client = discord.Client()
 
 @client.event
@@ -13,13 +14,49 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    if message.author==client.user:
-        return
-    if message.content.startswith(".tell me a joke"):
-        await message.channel.send("Roopjith!!")
 
-@bot.command()
-async def hello(ctx):
-    await ctx.reply("Hello!")
+    if message.author == client.user:
+        return
+    
+    if message.channel.name =="ask-valsan":
+        user_name = str(message.author).split("#")[0]
+        user_message = str(message.content)
+
+        if message.content.startswith(".search"):
+            search_term = message.content[8:]
+
+            payload = []
+
+            async def scrape():
+                async with async_playwright() as p:
+                    browser = await p.chromium.launch()
+                    page = await browser.new_page()
+                    await page.goto("https://piratebayorg.net", timeout=60000)
+
+                    await page.fill("#home > main > section > form > div:nth-child(1) > input[type=search]", f"{search_term}")
+                    await page.click("#home > main > section > form > div:nth-child(3) > input[type=submit]:nth-child(1)")
+                    await page.is_visible("#st > span.item-icons > a")
+
+                    html = await page.inner_html("#torrents")
+                    soup = BeautifulSoup(html, "html.parser")
+                    entries = soup.find_all(id="st")
+
+                    name = entries[0].find(class_="list-item item-name item-title").a.text
+                    size = entries[0].find(class_="list-item item-size").text
+                    link = entries[0].find(class_="item-icons").a['href']
+
+                    payload.append(f"Name: {name}\nSize: {size}\nLink: {link}")
+
+                    await browser.close()
+
+            await scrape()  
+
+            await message.channel.send(*payload)
+
+        if user_message.lower() == 'hello':
+            await message.channel.send(f"Hello {user_name}!")
+            return
+        elif user_message.lower() =="bye":
+            await message.channel.send(f"See you later {user_name}!")
 
 client.run(getenv("TOKEN"))
