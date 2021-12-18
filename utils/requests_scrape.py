@@ -1,7 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
 from pprint import pprint
-import time 
 
 def main():
     url = "https://piratebayorg.net/search.php"
@@ -12,7 +11,7 @@ def main():
     params = {"q":"vikings", "cat":0}
 
     r = requests.get(url, params=params)
-    soup = BeautifulSoup(r.text, 'html.parser')s
+    soup = BeautifulSoup(r.text, 'html.parser')
 
     pprint(soup)
 

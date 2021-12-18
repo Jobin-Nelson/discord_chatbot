@@ -1,6 +1,5 @@
 from playwright.async_api import async_playwright
 from bs4 import BeautifulSoup
-
 import discord
 from dotenv import load_dotenv
 from os import getenv
@@ -25,8 +24,6 @@ async def on_message(message):
         if message.content.startswith(".search"):
             search_term = message.content[8:]
 
-            payload = []
-
             async def scrape():
                 async with async_playwright() as p:
                     browser = await p.chromium.launch()
@@ -45,13 +42,12 @@ async def on_message(message):
                     size = entries[0].find(class_="list-item item-size").text
                     link = entries[0].find(class_="item-icons").a['href']
 
-                    payload.append(f"Name: {name}\nSize: {size}\nLink: {link}")
+                    payload = f"Name: {name}\nSize: {size}\nLink: {link}"
 
                     await browser.close()
+                return payload
 
-            await scrape()  
-
-            await message.channel.send(*payload)
+            await message.channel.send(await scrape())
 
         if user_message.lower() == 'hello':
             await message.channel.send(f"Hello {user_name}!")
