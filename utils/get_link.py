@@ -15,10 +15,17 @@ with sync_playwright() as p:
     soup = BeautifulSoup(html, "html.parser")
     entries = soup.find_all(id="st")
 
-    name = entries[0].find(class_="list-item item-name item-title").a.text
-    size = entries[0].find(class_="list-item item-size").text
-    link = entries[0].find(class_="item-icons").a['href']
+    if len(sys.argv)==3:
+        tries = int(sys.argv[2])
+    else:
+        tries = 3
 
-    payload = f"Name: {name}\nSize: {size}\nLink: {link}"
-    print(payload)
+    for i in range(tries):
+        name = entries[i].find(class_="list-item item-name item-title").a.text
+        size = entries[i].find(class_="list-item item-size").text
+        link = entries[i].find(class_="item-icons").a['href']
+
+        payload = f"\nName: {name}\nSize: {size}\nLink: {link}\n`"
+        print(payload) 
+
     
