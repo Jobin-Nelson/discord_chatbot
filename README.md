@@ -1,10 +1,10 @@
 # Discord Chatbot
 
-A basic bot to fetch [torrent](https://piratebayorg.net/) links. I’ve also included a script to get links straight from the command line. 
+A basic bot to fetch [torrent](https://piratebayorg.net/) links. I’ve also included a script to [get_links](https://github.com/Jobin-Nelson/discord_chatbot/blob/main/get_links.py) straight from the command line. 
 
 ## Installation
 
-- First, you need to make sure that all required libraries are downloaded
+- First, you need to make sure that all [required](https://github.com/Jobin-Nelson/discord_chatbot/blob/main/requirements.txt) libraries are downloaded
 - Run the below code to download the necessary webdrivers
 
 ```
