@@ -25,7 +25,7 @@ with sync_playwright() as p:
         size = entries[i].find(class_="list-item item-size").text
         link = entries[i].find(class_="item-icons").a['href']
 
-        payload = f"\nName: {name}\nSize: {size}\nLink: {link}\n`"
+        payload = f"\nName: {name}\nSize: {size}\nLink: {link}\n"
         print(payload) 
 
     
