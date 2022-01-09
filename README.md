@@ -31,3 +31,4 @@ playwright install
 ```
 python get_links.py "movie name" [number of links]
 ```
+*Tools: discord.py, playwright, bs4*
